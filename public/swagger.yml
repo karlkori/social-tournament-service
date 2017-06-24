@@ -1,0 +1,47 @@
+---
+swagger: '2.0'
+
+info:
+  version: v1
+  title: Social Tournament Service API
+  description: |
+    The first version of the API documentation.
+
+    ### We use next HTTP status codes:
+
+    | Code | Explanation |
+    |-----|-----|
+    | 200 | Everything is working |
+    | 201 | New resource is created |
+    | 400 | Bad Request – The request was invalid or cannot be served |
+    | 401 | Unauthorized – The request requires an user authentication or authentication header is invalid |
+    | 403 | Forbidden – The server understood the request, but is refusing it or the access is not allowed |
+    | 404 | Not found – There is no resource behind the URI |
+    | 500 | Internal Server Error |
+
+
+    ### Response format
+
+    All errors in response have next format and HTTP status code is 400 or 404 or 500 (developerMessage is optional):
+
+    ```json
+    {
+        "error": {
+            "message": "Player is not found",
+            "developerMessage": "More details about error for developer"
+        }
+    }
+    ```
+
+host: api.example.com
+basePath: /api/v1
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+
+
+paths:
+    /
