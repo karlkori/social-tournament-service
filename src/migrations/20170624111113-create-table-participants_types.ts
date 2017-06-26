@@ -1,18 +1,13 @@
 module.exports = {
   up: async function(queryInterface, Sequelize) {
-    return await queryInterface.createTable("Players", {
+    return await queryInterface.createTable("ParticipantsTypes", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT
+        type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING(256),
-        unique: true
-      },
-      balance: {
-        type: Sequelize.DECIMAL(1000, 2)
+        type: Sequelize.STRING(32),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +20,6 @@ module.exports = {
     });
   },
   down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable("Players");
+    return queryInterface.dropTable("ParticipantsTypes");
   }
 };

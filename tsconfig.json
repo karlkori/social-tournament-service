@@ -8,7 +8,6 @@
     "files": [
         "./node_modules/@types/bluebird/index.d.ts",
         "./node_modules/@types/core-js/index.d.ts",
-        "./node_modules/@types/email-templates/index.d.ts",
         "./node_modules/@types/koa/index.d.ts",
         "./node_modules/@types/koa-bodyparser/index.d.ts",
         "./node_modules/@types/koa-compress/index.d.ts",
@@ -17,7 +16,6 @@
         "./node_modules/@types/koa-router/index.d.ts",
         "./node_modules/@types/koa-static/index.d.ts",
         "./node_modules/@types/lodash/index.d.ts",
-        "./node_modules/@types/ms/index.d.ts",
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/@types/pg/index.d.ts",
         "./node_modules/@types/sequelize/index.d.ts",

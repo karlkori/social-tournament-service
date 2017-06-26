@@ -22,7 +22,7 @@ info:
 
     ### Response format
 
-    All errors in response have next format and HTTP status code is 400 or 404 or 500 (developerMessage is optional):
+    All errors in response have next format and HTTP status code is 400 or 404 or 500 (developerMessage is optional and available on development stage):
 
     ```json
     {
@@ -44,4 +44,236 @@ consumes:
 
 
 paths:
-    /
+    /fund:
+        post:
+            tags:
+                - player
+            summary: Funds player with points. If no player exist will create new player
+            description: ""
+            operationId: fund-player
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - $ref: "#/parameters/playerId"
+                - $ref: "#/parameters/points"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+
+    /take:
+        post:
+            tags:
+                - player
+            summary: Takes points from player account
+            description: ""
+            operationId: take-player
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - $ref: "#/parameters/playerId"
+                - $ref: "#/parameters/points"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+    /balance:
+        get:
+            tags:
+                - player
+            summary: Player balance
+            description: ""
+            operationId: balance-player
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - $ref: "#/parameters/playerId"
+            responses:
+                "200":
+                    description: Player balance info
+                    schema:
+                        $ref: "#/definitions/PlayerBalance"
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+
+    /announceTournament:
+        post:
+            tags:
+                - tournament
+            summary: Announce tournament specifying the entry deposit
+            description: ""
+            operationId: announce-tournament
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - $ref: "#/parameters/tournamentId"
+                - $ref: "#/parameters/deposit"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+
+    /joinTournament:
+        post:
+            tags:
+                - tournament
+            summary: Join player into a tournament and is he backed by a set of backers
+            description: ""
+            operationId: join-tournament
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - $ref: "#/parameters/tournamentId"
+                - $ref: "#/parameters/playerId"
+                - $ref: "#/parameters/backerId"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+    /resultTournament:
+        post:
+            tags:
+                - tournament
+            summary: Result tournament winners and prizes
+            description: ""
+            operationId: result-tournament
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+                - in: body
+                  description: Tournament result
+                  required: true
+                  schema:
+                    $ref: "#/definitions/TournamentResult"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+
+    /reset:
+        post:
+            tags:
+                - service
+            summary: Reset database to initial/empty state
+            description: ""
+            operationId: reset
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - $ref: "#/parameters/contentTypeHeader"
+            responses:
+                "204":
+                    description: Operation was successful
+                "400":
+                    description: Passed parameter are incorrect
+                    schema:
+                        $ref: "#/definitions/Error"
+
+parameters:
+  contentTypeHeader:
+    in: header
+    name: Content-type
+    required: true
+    type: string
+    format: application/json
+  playerId:
+    in: query
+    name: playerId
+    description: unique ID of player
+    required: true
+    type: string
+  backerId:
+    in: query
+    name: backerId
+    description: unique ID of player
+    required: true
+    type: string
+  points:
+    in: query
+    name: points
+    description: amount of points (more than zero)
+    required: true
+    type: integer
+  tournamentId:
+    in: query
+    name: tournamentId
+    description: unique ID of tournament
+    required: true
+    type: string
+  deposit:
+    in: query
+    name: deposit
+    description: amount of points (more than zero)
+    required: true
+    type: integer
+
+definitions:
+  Error:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          message:
+            type: string
+          developerMessage:
+            type: string
+  TournamentResult:
+    type: object
+    properties:
+        tournamentId:
+            type: string
+        winners:
+            type: array
+            items:
+                type: object
+                properties:
+                    playerId:
+                        type: string
+                    prize:
+                        type: integer
+  PlayerBalance:
+    type: object
+    properties:
+        playerId:
+            type: string
+        balance:
+            type: number,
+            format: float

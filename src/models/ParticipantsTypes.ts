@@ -1,19 +1,14 @@
 import models from "./index";
 
 export default function(sequelize, DataTypes) {
-
   const fields = {
     id: {
-      type: DataTypes.BIGINT,
-      autoIncrement: true,
+      type: DataTypes.INTEGER,
       primaryKey: true
     },
     name: {
-      type: DataTypes.STRING(256),
-      unique: true
-    },
-    balance: {
-      type: DataTypes.DECIMAL(1000, 2)
+      type: DataTypes.STRING(32),
+      allowNull: false
     }
   };
 
@@ -23,19 +18,15 @@ export default function(sequelize, DataTypes) {
 
   const instanceMethods = {};
 
-  const relations = {};
-
-  let players = sequelize.define("Players", fields, {
+  let participantsTypes = sequelize.define("ParticipantsTypes", fields, {
     indexes,
     hooks,
     instanceMethods,
     timestamps: true,
     freezeTableName: true,
     paranoid: false,
-    classMethods: {
-      relations
-    }
+    classMethods: {}
   });
 
-  return players;
+  return participantsTypes;
 }

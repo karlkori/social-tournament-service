@@ -44,9 +44,10 @@ To run sequelize commands localy, export correct variable DATABASE_URL
 
 Docker:
 
-- Install `docker`
+- Install `docker` & `docker-compose`
 
-- `docker build -t social-tournament-service .`
+- Build image `docker-compose build`
 
-- `docker run -e DATABASE_URL=postgres://postgres:postgres@localhost:5432/logs -e PORT=5000 -p 80:5000`
+- Run servcie `docker-compose up`
 
+- Open up http://127.0.0.1/developer.html

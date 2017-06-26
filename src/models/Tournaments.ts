@@ -1,7 +1,6 @@
 import models from "./index";
 
 export default function(sequelize, DataTypes) {
-
   const fields = {
     id: {
       type: DataTypes.BIGINT,
@@ -12,8 +11,12 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.STRING(256),
       unique: true
     },
-    balance: {
+    deposit: {
       type: DataTypes.DECIMAL(1000, 2)
+    },
+    finished: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   };
 
@@ -23,19 +26,15 @@ export default function(sequelize, DataTypes) {
 
   const instanceMethods = {};
 
-  const relations = {};
-
-  let players = sequelize.define("Players", fields, {
+  let tournaments = sequelize.define("Tournaments", fields, {
     indexes,
     hooks,
     instanceMethods,
     timestamps: true,
     freezeTableName: true,
     paranoid: false,
-    classMethods: {
-      relations
-    }
+    classMethods: {}
   });
 
-  return players;
+  return tournaments;
 }

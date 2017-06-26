@@ -10,19 +10,12 @@ const config = {
     url: process.env.DATABASE_URL,
     options: {
       dialect: "postgres",
-      ssl: true,
-      dialectOptions: {
-        ssl: {
-          require: true
-        }
-      },
       native: false,
       pool: {
         max: 5,
         min: 1,
         idle: 100000
-      },
-      logging: logger.verbose
+      }
     }
   }
 };

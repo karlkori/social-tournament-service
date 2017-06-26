@@ -1,6 +1,6 @@
 module.exports = {
   up: async function(queryInterface, Sequelize) {
-    return await queryInterface.createTable("Players", {
+    return await queryInterface.createTable("Tournaments", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,8 +11,11 @@ module.exports = {
         type: Sequelize.STRING(256),
         unique: true
       },
-      balance: {
+      deposit: {
         type: Sequelize.DECIMAL(1000, 2)
+      },
+      finished: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +28,6 @@ module.exports = {
     });
   },
   down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable("Players");
+    return queryInterface.dropTable("Tournaments");
   }
 };
