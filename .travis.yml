@@ -18,4 +18,4 @@ jobs:
       - docker tag $REPO:$COMMIT $REPO:latest
       - docker push $REPO
     - stage: test
-      script: docker run --rm $REPO npm test
+      script: docker run --rm sergiydagunov/social-tournament-service npm test
