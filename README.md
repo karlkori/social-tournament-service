@@ -1,10 +1,18 @@
-# Social Tournament Service
+# Social Tournament Service [![Build Status](https://travis-ci.org/karlkori/social-tournament-service.svg?branch=master)](https://travis-ci.org/karlkori/social-tournament-service)
 
 Koa2, Typescript, PostgresDB, Sequelize, Docker, OpenAPI specification
 
 ## Prerequisites:
 
-Install node.js
+- Install `docker` & `docker-compose`
+
+- Build image `docker-compose build`
+
+- Run tests  `docker-compose -f docker-compose.test.yml up`
+
+- Run service `docker-compose up`
+
+- Open up http://127.0.0.1/developer.html - this is an API documentation
 
 - `npm install`
 
@@ -41,13 +49,3 @@ To update the documentation please update public/swagger.yml file
 To run sequelize commands localy, export correct variable DATABASE_URL
 
 `DATABASE_URL=postgres://postgres:postgres@localhost:5432/tournament sequelize db:migrate`
-
-Docker:
-
-- Install `docker` & `docker-compose`
-
-- Build image `docker-compose build`
-
-- Run servcie `docker-compose up`
-
-- Open up http://127.0.0.1/developer.html
