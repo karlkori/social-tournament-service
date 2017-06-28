@@ -19,6 +19,8 @@ jobs:
     - stage: test
       script:
       - psql -c 'create database tournament;' -U postgres
+      - npm i
+      - npm -g typescript
       - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run migrate
       - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run test
     - stage: build and deploy docker image
