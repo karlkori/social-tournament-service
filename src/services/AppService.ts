@@ -12,6 +12,9 @@ const reset = async function() {
       await models.TournamentsParticipants.destroy({
         where: {}
       });
+      await models.TournamentsWinners.destroy({
+        where: {}
+      });
       await models.Tournaments.destroy({ where: {} });
       await models.Players.destroy({ where: {} });
     } catch (err) {

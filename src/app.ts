@@ -13,27 +13,8 @@ import catchError from "./api/middlewares/catchError";
 import router from "./config/routes";
 import config from "./config/app";
 
-class App {
-  public koa: any;
 
-  constructor() {
-    this.koa = new Koa();
-
-    this.koa.on("error", function(err) {
-      this.shutdown(err);
-    });
-  }
-
-  public async init() {
-
-    await this.bootstrap();
-    this.middleware();
-    this.koa.listen(config.port, () =>
-      logger.info(`server started at ${config.port}`)
-    );
-  }
-
-  public shutdown(err?) {
+const shutdown = function(err?) {
     if (err) {
       logger.error(err);
     }
@@ -46,9 +27,9 @@ class App {
 
     // if error is passed - exit with error code otherwise without error code
     process.exit(!!err ? 1 : 0);
-  }
+}
 
-  private async bootstrap() {
+const bootstrap = async function() {
     logger.info("bootstrapping...");
 
     try {
@@ -59,9 +40,9 @@ class App {
     }
   }
 
-  private middleware(): void {
-    this.koa.use(helmet());
-    this.koa.use(
+const middleware = function(): void {
+    app.use(helmet());
+    app.use(
       convert(
         cors({
           origin: "*",
@@ -70,15 +51,26 @@ class App {
         })
       )
     );
-    this.koa.use(catchError());
-    this.koa.use(convert(bodyParser()));
-    this.koa.use(convert(json()));
-    this.koa.use(convert(koaLogger()));
-    this.koa.use(convert(router.routes()));
-    this.koa.use(convert(router.allowedMethods()));
-    this.koa.use(convert(compress()));
-    this.koa.use(convert(serve(__dirname + "/../public")));
+    app.use(convert(bodyParser()));
+    app.use(catchError());
+    app.use(convert(json()));
+    // app.use(convert(koaLogger()));
+    app.use(convert(router.routes()));
+    app.use(convert(router.allowedMethods()));
+    app.use(convert(compress()));
+    app.use(convert(serve(__dirname + "/../public")));
   }
-}
 
-export default App;
+const app = new Koa();
+
+app.on("error", function(err) {
+    shutdown(err);
+});
+
+middleware();
+
+export default {
+    server: app,
+    bootstrap,
+    shutdown
+};

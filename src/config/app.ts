@@ -15,7 +15,8 @@ const config = {
         max: 5,
         min: 1,
         idle: 100000
-      }
+      },
+      logging: logger.debug
     }
   }
 };

@@ -76,7 +76,7 @@ const balance = async function(playerId: string) {
     throw new AppError(404, "Player not found!");
   }
 
-  return player.balance;
+  return parseFloat(player.balance);
 };
 
 export default {

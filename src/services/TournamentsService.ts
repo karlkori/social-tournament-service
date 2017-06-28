@@ -187,7 +187,7 @@ const join = async function(tournamentId: string, playerId, backersIds: any[]) {
         transaction: t
       });
     } catch (err) {
-      logger.error("Error during transaction: ", err);
+      logger.warn("Error during transaction: ", err);
       t.rollback();
       throw new AppError(500, "Server error", err);
     }
@@ -230,7 +230,7 @@ const result = async function(tournamentId: string, winners: any[]) {
 
       await Promise.all(winnersPromises);
     } catch (err) {
-      logger.error("Error during transaction: ", err);
+      logger.warn("Error during transaction: ", err);
       t.rollback();
       throw err;
     }

@@ -1,5 +1,12 @@
 sudo: true
 dist: trusty
+language: node_js
+node_js:
+  - "8"
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
 
 env:
   global:
@@ -13,9 +20,10 @@ jobs:
     - stage: build docker image
       script:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - export REPO=sergiydagunov/social-tournament-service
-      - docker build -f Dockerfile -t $REPO:$COMMIT .
-      - docker tag $REPO:$COMMIT $REPO:latest
-      - docker push $REPO
+      - docker build -f Dockerfile -t sergiydagunov/social-tournament-service:$COMMIT .
+      - docker tag $sergiydagunov/social-tournament-service:$COMMIT sergiydagunov/social-tournament-service:latest
+      - docker push sergiydagunov/social-tournament-service
     - stage: test
-      script: docker run --rm sergiydagunov/social-tournament-service npm test
+      script:
+      - docker run --rm -e DATABASE_URL=postgres@localhost:5432/travis_ci_test sergiydagunov/social-tournament-service npm run migrate
+      - docker run --rm -e DATABASE_URL=postgres@localhost:5432/travis_ci_test sergiydagunov/social-tournament-service npm test
