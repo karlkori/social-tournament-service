@@ -16,12 +16,14 @@ env:
 
 jobs:
   include:
-    - stage: build, test and deploy docker image
+    - stage: test
       script:
       - psql -c 'create database tournament;' -U postgres
+      - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run migrate
+      - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run test
+    - stage: build and deploy docker image
+      script:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker build -f Dockerfile -t sergiydagunov/social-tournament-service:$COMMIT .
       - docker tag $sergiydagunov/social-tournament-service:$COMMIT sergiydagunov/social-tournament-service:latest
-      - docker run --net=host postgresql -e DATABASE_URL=postgres://postgres@localhost:5432/tournament sergiydagunov/social-tournament-service npm run migrate
-      - docker run --net=host postgresql -e DATABASE_URL=postgres://postgres@localhost:5432/tournament sergiydagunov/social-tournament-service npm test
       - docker push sergiydagunov/social-tournament-service
