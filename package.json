@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node build/index.js",
         "build": "rm -rf ./build && tsc",
-        "test": "npm run build && PORT=9999 LOG_LEVEL=error NODE_ENV=test ./node_modules/.bin/mocha build/test",
+        "test": "PORT=9999 LOG_LEVEL=error NODE_ENV=test ./node_modules/.bin/mocha build/test",
+        "build-test": "npm run build && PORT=9999 LOG_LEVEL=error NODE_ENV=test ./node_modules/.bin/mocha build/test",
         "debug": "npm run build && node --inspect build/",
         "dev-server": "./node_modules/.bin/nodemon -e ts --exec 'ts-node' ./src/index.ts",
         "lint": "tslint ./src/**/*.ts",
@@ -64,8 +65,6 @@
         "husky": "^0.13.1",
         "mocha": "^3.2.0",
         "nodemon": "^1.8.1",
-        "should": "^11.2.0",
-        "supertest": "^3.0.0",
-        "tape": "^4.7.0"
+        "supertest": "^3.0.0"
     }
 }

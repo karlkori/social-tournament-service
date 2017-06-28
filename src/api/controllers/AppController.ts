@@ -8,7 +8,7 @@ import AppService from "../../services/AppService";
 const reset = async function(ctx) {
   await AppService.reset();
 
-  ctx.body = {};
+  ctx.body = null;
 };
 
 export default {

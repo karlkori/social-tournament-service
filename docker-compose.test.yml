@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tournament
+  social-tournament-service:
+    build: .
+    image: sergiydagunov/social-tournament-service:latest
+    environment:
+      - POST=5000
+      - LOG_LEVEL=verbose
+      - STAGE=master
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/tournament
+    ports:
+      - 80:5000
+    depends_on:
+      - db
+    entrypoint:
+      - npm
+      - test
+    command:
+      - npm
+      - run
+      - migrate

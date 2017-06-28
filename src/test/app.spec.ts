@@ -11,11 +11,13 @@ before(async () => {
 });
 
 describe("App controller", () => {
-  it("/reset", async () => {
-    let response: supertest.Response = await request.post("/reset");
-    expect(response.status).to.equal(200);
-    expect(response.body).to.be.empty;
-  });
+    describe("expects http status 204", () => {
+        it("/reset", async () => {
+            let response: supertest.Response = await request.post("/reset");
+            expect(response.status).to.equal(204);
+            expect(response.body).to.be.empty;
+        });
+    });
 });
 
 describe("Player controller", () => {
