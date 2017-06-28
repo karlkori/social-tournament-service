@@ -4,6 +4,7 @@ language: node_js
 node_js:
   - "8"
 services:
+  - postgresql
   - docker
 
 env:
@@ -12,20 +13,15 @@ env:
   - secure: XgxcOUWqUjgaMgHKaiNff/2Tiv4ahHL8aqo0RB6bomtHbMswIft0yRZ+ZHMjDIaFESkL2uxmkJRDf5wn+lFclviSpgTz1FK2xWNrLoXu0FzG5W+5f+6pP3u9XZQMsLMgnbJlkDs3G0ZNvQgPrtCURQBP5H2qt4JXmfWC4442vp5wvL4ZkAuGpwsN657H9czfj2+IQk088vQaysROcIC4OtmZWTZBztps7plxBeuYaum+MB7Y7iADujaFYVMwo4P2u+miAADuapeByE/PaXoHE4rEJLjk0psWbjyF9AFEehqQPzlX5X556pmvlDZCeDK0O0gg4/JRaH7pH3u4vPikjkeLmfBy4DBdZXO1VEvBcnIF/zp7pllDC9KXoUgdJONV1qutgm/D7UEXbhxaiiKpztSy9BJ/6kFpnlw9IXodAy7ENO2PFy0TtQhSNRkC81c5rwLR6zI1nWGCKY1ywWlCMVJC2CaiTPsHKs5DJ8A9xaOJugBz0qeF/0EEEZfM8p5jluWXcYi2LnPqekW4uUdB7r3xultVWpQuoahMjkWL1DDksdmD2yg8lIC1FJfFgX318QYIWEtZaaCqC5+f1bps4jwZUhrDHqoUVgKPyDcBHfLQ522aAkJMP5UpnIKCgVB8pGZa6DFVgR4G47GMKK2W1SKn831Du2fnAKZtf6H4UJc=
   - secure: NHQwhA8U+xMymzpYzyy8CLZLnsjbZuR/eiCV4u5bKNwXaaLbh5tEGtZrJCIcrtExzta4HB5WA+170JF0yx25xfyLdyMcb1kIxv8trbkmxjjC3UlEMRqciA3sr0Cw1FatSlMX7VnB0RyaxSPefp8XzZsZCfPzUWIjRu4aiwsUttO0TKlPVbTYjvFsZrau82cAkQVyCAD+tKJhWto/zWaF/YzwxNwxtUxehHPqHgrITR2tH+PqTQDhlqliBGZdpO3CqIL27MXXuN1i1JK/Pww0ll0fChd7tdYHfeBQSgR2iWwY6kfG+8yCBoYhiXHlab4y23o9gVzF7q42EtMnzBNvEJsZknxPme+bHUGo7by4VstOpvvxNvZUmB2x08aMEK2nsUSRK3eAUFUKHEjK5Y2dmXdne2tFqr/UpzphV4iSbz5I9BBVrshpk3ly3HupyuMLqkCn0fFoHXXNMsw/fJnPhZ88YkZaBMw4sBRLXzJI3XSLFI/PaQPHwpfNpb6k+WXuS/+yvso7/xgYEwzX3YrWJipS4gmAiMzUUtIgH54mLsVveT1zacam5VLzgp/0b0AlgrweJjRa6MarcNdl2B6bTs/Sz7qYnhuaGIpgxA4B2preZF+rjKwF+QzOHNHgYKOmwCpamp8ZWYskPx/NqW/epZg6P8MZCKCyvDIc20t9x+M=
   - COMMIT=${TRAVIS_COMMIT::8}
-  - DOCKER_COMPOSE_VERSION=1.14.0
-
-before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
 
 jobs:
   include:
     - stage: build, test and deploy docker image
       script:
+      - psql -c 'create database tournament;' -U postgres
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker build -f Dockerfile -t sergiydagunov/social-tournament-service:$COMMIT .
       - docker tag $sergiydagunov/social-tournament-service:$COMMIT sergiydagunov/social-tournament-service:latest
-      - docker-compose -f docker-compose.test.yml up
+      - docker run --net=host postgresql -e DATABASE_URL=postgres://postgres@localhost:5432/tournament sergiydagunov/social-tournament-service npm run migrate
+      - docker run --net=host postgresql -e DATABASE_URL=postgres://postgres@localhost:5432/tournament sergiydagunov/social-tournament-service npm test
       - docker push sergiydagunov/social-tournament-service
