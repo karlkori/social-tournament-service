@@ -4,7 +4,6 @@ language: node_js
 node_js:
   - "8"
 services:
-  - postgresql
   - docker
 
 env:
@@ -16,13 +15,6 @@ env:
 
 jobs:
   include:
-    - stage: test
-      script:
-      - psql -c 'create database tournament;' -U postgres
-      - npm i
-      - npm i -g typescript sequelize
-      - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run migrate
-      - DATABASE_URL=postgres://postgres@localhost:5432/tournament npm run test
     - stage: build and deploy docker image
       script:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS

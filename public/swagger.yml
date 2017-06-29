@@ -34,8 +34,8 @@ info:
     }
     ```
 
-host: api.example.com
-basePath: /api/v1
+host: localhost
+basePath: /
 schemes:
   - https
 produces:
