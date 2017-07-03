@@ -9,7 +9,7 @@ Koa2, Typescript, PostgresDB, Sequelize, Docker, OpenAPI specification
 
 - Build image `docker-compose build`
 
-- Run tests  `docker-compose -f docker-compose.test.yml up`
+- Run tests `docker-compose run social-tournament-service npm run test`
 
 - Run service `docker-compose up`
 

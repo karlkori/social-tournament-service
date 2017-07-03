@@ -15,15 +15,10 @@ services:
       - POST=5000
       - LOG_LEVEL=verbose
       - STAGE=master
+      - POSTGRES_HOST=db
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tournament
     ports:
       - 80:5000
+    command: sh -c './wait-for && sequelize db:migrate && npm start'
     depends_on:
       - db
-    entrypoint:
-      - npm
-      - start
-    command:
-      - npm
-      - run
-      - migrate
